@@ -33,6 +33,7 @@ class RequestedGMC(models.Model):
         return f"GMC Request for {self.student} - {self.reason}"
         
 class Schedule(models.Model):
+    sched_Id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     start_datetime = models.DateTimeField()
