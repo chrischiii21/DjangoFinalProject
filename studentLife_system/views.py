@@ -1,7 +1,11 @@
-from django.shortcuts import redirect, render
-from django.contrib import messages  # Import messages modul
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages  
 from .models import studentInfo, RequestedGMC
 from django.utils.timezone import localtime, now
+from .models import Schedule
+from .forms import ScheduleForm
+from datetime import datetime
+import json
 
 # Create your views here.
 
@@ -23,23 +27,29 @@ def requestgmc(request):
     if request.method == "GET" and "searchID" in request.GET:
         student_id = request.GET.get("searchID")
         if student_id:
-            try:
-                student = studentInfo.objects.get(studID=student_id)
-            except studentInfo.DoesNotExist:
-                student = None
-                messages.error(request, "Student not found")
+            if student_id.isdigit():
+                try:
+                    student = studentInfo.objects.get(studID=student_id)
+                except studentInfo.DoesNotExist:
+                    student = None
+                    messages.error(request, "Student not found")
+            else:
+                messages.error(request, "Student ID must be numeric")
 
     if request.method == "POST":
         student_id = request.POST.get("student_id")
         reason = request.POST.get("reason")
         if student_id and reason:
-            try:
-                student = studentInfo.objects.get(studID=student_id)
-                RequestedGMC.objects.create(student=student, reason=reason)
-                messages.success(request, "Good Moral Certificate request submitted successfully")
-                return redirect('requestgmc') 
-            except studentInfo.DoesNotExist:
-                messages.error(request, "Student not found")
+            if student_id.isdigit():
+                try:
+                    student = studentInfo.objects.get(studID=student_id)
+                    RequestedGMC.objects.create(student=student, reason=reason)
+                    messages.success(request, "Good Moral Certificate request submitted successfully")
+                    return redirect('requestgmc') 
+                except studentInfo.DoesNotExist:
+                    messages.error(request, "Student not found")
+            else:
+                messages.error(request, "Student ID must be numeric")
 
     context = {"student": student}
     return render(request, "studentLife/requestgmc.html", context)
@@ -75,9 +85,63 @@ def generateGmc(request, request_id):
         return redirect('adminRequestedGmc')
     
 def monthlyCalendar(request):
-    return render(request, "studentLife/monthlyCalendar.html")
+    schedules = Schedule.objects.all()
+    sched_res = {}
 
+    for schedule in schedules:
+        sched_res[schedule.sched_Id] = {
+            'id': schedule.sched_Id,
+            'title': schedule.title,
+            'description': schedule.description,
+            'start_datetime': schedule.start_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            'end_datetime': schedule.end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            'sdate': schedule.start_datetime.strftime("%B %d, %Y %I:%M %p"),
+            'edate': schedule.end_datetime.strftime("%B %d, %Y %I:%M %p")
+        }
+
+    context = {
+        'sched_json': json.dumps(sched_res)
+    }
+    return render(request, "studentLife/monthlyCalendar.html", context)
 
 def monthlyCalendarAdmin(request):
-    return render(request, 'adminUser/monthlyCalendarAdmin.html')
+    schedules = Schedule.objects.all()
+    sched_res = {}
 
+    for schedule in schedules:
+        sched_res[schedule.sched_Id] = {
+            'id': schedule.sched_Id,
+            'title': schedule.title,
+            'description': schedule.description,
+            'start_datetime': schedule.start_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            'end_datetime': schedule.end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            'sdate': schedule.start_datetime.strftime("%B %d, %Y %I:%M %p"),
+            'edate': schedule.end_datetime.strftime("%B %d, %Y %I:%M %p")
+        }
+
+    context = {
+        'sched_json': json.dumps(sched_res)
+    }
+    return render(request, 'adminUser/monthlyCalendarAdmin.html', context)
+
+
+def save_schedule(request):
+    if request.method == 'POST':
+        schedule_id = request.POST.get('id')
+        if schedule_id:
+            schedule = get_object_or_404(Schedule, pk=schedule_id)
+            form = ScheduleForm(request.POST, instance=schedule)
+        else:
+            form = ScheduleForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('monthlyCalendarAdmin')
+    else:
+        form = ScheduleForm()
+    return render(request, 'adminUser/monthlyCalendarAdmin.html', {'form': form})
+
+def delete_schedule(request, schedule_id):
+    schedule = get_object_or_404(Schedule, pk=schedule_id)
+    schedule.delete()
+    return redirect('monthlyCalendarAdmin')

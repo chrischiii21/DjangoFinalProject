@@ -38,6 +38,7 @@ class Schedule(models.Model):
     description = models.TextField()
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
-
+   
+    
     def __str__(self):
-        return self.title
+        return f"{self.sched_Id} {self.title}"

@@ -10,5 +10,6 @@ urlpatterns = [
     path('generate-gmc/<int:request_id>/', views.generateGmc, name='generateGmc'),
     path('monthlyCalendar', views.monthlyCalendar, name='monthlyCalendar'),
     path('monthlyCalendarAdmin', views.monthlyCalendarAdmin, name='monthlyCalendarAdmin'),
-   
+    path('save-schedule/', views.save_schedule, name='save_schedule'),
+    path('delete-schedule/<int:schedule_id>/', views.delete_schedule, name='delete_schedule'),
 ]

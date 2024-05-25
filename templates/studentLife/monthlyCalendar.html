@@ -174,7 +174,7 @@
     
 </body>
 <script>
-    var scheds = $.parseJSON('<?= json_encode($sched_res) ?>')
+    var scheds = JSON.parse('{{ sched_json|escapejs }}');
 </script>
 <script src="{% static 'js/script.js'%}"></script>
 

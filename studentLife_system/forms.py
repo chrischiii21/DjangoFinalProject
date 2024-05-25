@@ -1,8 +1,11 @@
-# forms.py
 from django import forms
-from .models import Event
+from .models import Schedule
 
-class EventForm(forms.ModelForm):
+class ScheduleForm(forms.ModelForm):
     class Meta:
-        model = Event
+        model = Schedule
         fields = ['title', 'description', 'start_datetime', 'end_datetime']
+        widgets = {
+            'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }

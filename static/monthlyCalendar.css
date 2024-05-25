@@ -238,3 +238,8 @@ color: #ff8000;
     color: black;
 
 }
+
+#title,#description,#start,#end{
+    color: black;
+    border: none;
+}

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'monthlyCalendar.css' %}">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrapAdmin.min.css' %}">
     <link rel="stylesheet" href="{% static 'fullcalendar/lib/main.min.css'%}">
     <script src="{% static 'js/jquery-3.6.0.min.js'%}"></script>
     <script src="{% static 'js/bootstrap.min.js'%}"></script>
@@ -164,8 +164,9 @@
             </div>
             <div class="card-body">
                 <div class="container-fluid">
-                    <form action="save_schedule.php" method="post" id="schedule-form">
-                        <input type="hidden" name="id" value="">
+                    <form action="{% url 'save_schedule' %}" method="post" id="schedule-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" id="schedule_id">
                         <div class="form-group mb-2">
                             <label for="title" class="control-label">Title</label>
                             <input type="text" class="form-control form-control-sm rounded-0" name="title" id="title" required>
@@ -182,13 +183,11 @@
                             <label for="end_datetime" class="control-label">End</label>
                             <input type="datetime-local" class="form-control form-control-sm rounded-0" name="end_datetime" id="end_datetime" required>
                         </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-sm rounded-0" type="submit"><i class="fa fa-save"></i> Save</button>
+                            <button class="btn btn-default border btn-sm rounded-0" type="reset"><i class="fa fa-reset"></i> Cancel</button>
+                        </div>
                     </form>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="text-center">
-                    <button class="btn btn-primary btn-sm rounded-0" type="submit" form="schedule-form"><i class="fa fa-save"></i> Save</button>
-                    <button class="btn btn-default border btn-sm rounded-0" type="reset" form="schedule-form"><i class="fa fa-reset"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -240,12 +239,10 @@
     
 </body>
 <script>
-    var scheds = $.parseJSON('<?= json_encode($sched_res) ?>')
+    var scheds = JSON.parse('{{ sched_json|escapejs }}');
 </script>
-<script src="{% static 'js/script.js'%}"></script>
 
-   
+<script src="{% static 'js/script.js' %}"></script>
 <script src="{% static 'newmain.js' %}"></script>
 </body>
-
-
+</html>
