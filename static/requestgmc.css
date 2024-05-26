@@ -74,7 +74,7 @@
 }
 
 .searchBtn {
-  margin-left: 1em;
+  margin-left: -2em;
 }
 
 .requestBtn{
@@ -99,7 +99,7 @@
 .searchBtn,
 .requestBtn {
   background-color: #ff8000;
-  height: 40px;
+  height: 35px;
   width: 120px;
   border: none;
   border-radius: 5px;

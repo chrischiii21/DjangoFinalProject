@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     path('requestgmc', views.requestgmc, name="requestgmc"),
+    path('equipmenttracker', views.equipmentTracker, name='equipmentTracker'),
+    path('equipmenttrackerAdmin', views.equipmentTrackerAdmin, name='equipmentTrackerAdmin'),
     path('adminmain', views.adminhome, name="adminmain"),
     path('requested-gmc', views.adminRequestedGmc, name='adminRequestedGmc'),
     path('gmc-form', views.gmcform, name="gmcform"),

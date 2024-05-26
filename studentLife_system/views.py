@@ -21,6 +21,12 @@ def adminGmc(request):
 def gmcform(request):
     return render(request, "adminUser/gmcform.html")
 
+def equipmentTracker(request):
+    return render(request, "studentLife/equipmentTracker.html")
+
+def equipmentTrackerAdmin(request):
+    return render(request, "adminUser/equipmentTrackerAdmin.html")
+
 def requestgmc(request):
     student = None
 
