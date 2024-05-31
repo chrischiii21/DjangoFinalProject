@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import studentInfo,RequestedGMC,Schedule
+from .models import studentInfo,RequestedGMC,Schedule,equipment
 
 class StudentInfoAdmin(admin.ModelAdmin):
     
@@ -19,3 +19,7 @@ class scheduleAdmin(admin.ModelAdmin):
     list_display = ('sched_Id','title', 'description', 'start_datetime', 'end_datetime')
 
 admin.site.register(Schedule, scheduleAdmin)
+
+admin.site.register(equipment)
+
+

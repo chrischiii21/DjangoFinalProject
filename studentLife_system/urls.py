@@ -5,7 +5,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('requestgmc', views.requestgmc, name="requestgmc"),
     path('equipmenttracker', views.equipmentTracker, name='equipmentTracker'),
-    path('equipmenttrackerAdmin', views.equipmentTrackerAdmin, name='equipmentTrackerAdmin'),
+    path('equipmenttrackerAdmin/', views.equipmentTrackerAdmin, name='equipmentTrackerAdmin'),
     path('adminmain', views.adminhome, name="adminmain"),
     path('requested-gmc', views.adminRequestedGmc, name='adminRequestedGmc'),
     path('gmc-form', views.gmcform, name="gmcform"),
@@ -14,4 +14,7 @@ urlpatterns = [
     path('monthlyCalendarAdmin', views.monthlyCalendarAdmin, name='monthlyCalendarAdmin'),
     path('save-schedule/', views.save_schedule, name='save_schedule'),
     path('delete-schedule/<int:schedule_id>/', views.delete_schedule, name='delete_schedule'),
+    path('addEquipment/', views.addEquipment, name='addEquipment'),
+
+   
 ]

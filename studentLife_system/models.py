@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class studentInfo(models.Model):
     studID = models.IntegerField(primary_key=True)
@@ -19,7 +17,7 @@ class studentInfo(models.Model):
         return f"{self.studID} {self.lastname} {self.firstname}"
     
     class Meta:
-        ordering = ['lastname']  # Specify the default ordering herea
+        ordering = ['lastname']  
 
 
 class RequestedGMC(models.Model):
@@ -27,7 +25,7 @@ class RequestedGMC(models.Model):
     reason = models.TextField()
     or_num = models.CharField(max_length=100, null=True, blank=True)
     request_date = models.DateTimeField(auto_now_add=True)
-    processed = models.BooleanField(default=False)  # Add this field
+    processed = models.BooleanField(default=False)  
     
     def __str__(self):
         return f"GMC Request for {self.student} - {self.reason}"
@@ -42,3 +40,13 @@ class Schedule(models.Model):
     
     def __str__(self):
         return f"{self.sched_Id} {self.title}"
+
+
+class equipment(models.Model):
+    itemId = models.AutoField(primary_key=True)
+    equipmentName = models.CharField(max_length=255)
+    equipmentSN = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f"{self.equipmentName} {self.equipmentSN}"
+    

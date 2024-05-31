@@ -1,17 +1,18 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages  
-from .models import studentInfo, RequestedGMC
+from .models import studentInfo, RequestedGMC,equipment,Schedule
 from django.utils.timezone import localtime, now
-from .models import Schedule
 from .forms import ScheduleForm
 from datetime import datetime
 import json
 
 # Create your views here.
 
+# Student 
 def home(request):
     return render(request, "studentLife/main.html")
 
+# Admin
 def adminhome(request):
     return render(request, "adminUser/adminmain.html")
 
@@ -24,9 +25,7 @@ def gmcform(request):
 def equipmentTracker(request):
     return render(request, "studentLife/equipmentTracker.html")
 
-def equipmentTrackerAdmin(request):
-    return render(request, "adminUser/equipmentTrackerAdmin.html")
-
+# Request for GoodMoral Certificate Student Side 
 def requestgmc(request):
     student = None
 
@@ -60,12 +59,13 @@ def requestgmc(request):
     context = {"student": student}
     return render(request, "studentLife/requestgmc.html", context)
 
+# Processing Goodmoral Certificate Admin side 
 def adminRequestedGmc(request):
     gmc_requests = RequestedGMC.objects.filter(processed=False)
     context = {"gmc_requests": gmc_requests}
     return render(request, "adminUser/adminRequestedGmc.html", context)
 
-
+# Making of Goodmoral Certificate
 def generateGmc(request, request_id):
     try:
         gmc_request = RequestedGMC.objects.get(id=request_id)
@@ -89,7 +89,8 @@ def generateGmc(request, request_id):
     except RequestedGMC.DoesNotExist:
         messages.error(request, "GMC Request not found")
         return redirect('adminRequestedGmc')
-    
+
+# Calendar Of Activities Student Side 
 def monthlyCalendar(request):
     schedules = Schedule.objects.all()
     sched_res = {}
@@ -110,6 +111,7 @@ def monthlyCalendar(request):
     }
     return render(request, "studentLife/monthlyCalendar.html", context)
 
+# Calendar of Activities Admin 
 def monthlyCalendarAdmin(request):
     schedules = Schedule.objects.all()
     sched_res = {}
@@ -131,6 +133,7 @@ def monthlyCalendarAdmin(request):
     return render(request, 'adminUser/monthlyCalendarAdmin.html', context)
 
 
+# Save Schedule
 def save_schedule(request):
     if request.method == 'POST':
         schedule_id = request.POST.get('id')
@@ -147,7 +150,50 @@ def save_schedule(request):
         form = ScheduleForm()
     return render(request, 'adminUser/monthlyCalendarAdmin.html', {'form': form})
 
+# Delete Schedule
 def delete_schedule(request, schedule_id):
     schedule = get_object_or_404(Schedule, pk=schedule_id)
     schedule.delete()
     return redirect('monthlyCalendarAdmin')
+
+
+def equipmentTrackerAdmin(request):
+    student = None
+
+    if request.method == "GET" and "search" in request.GET:
+        search_id = request.GET.get("search")
+        if search_id:
+            try:
+                student = studentInfo.objects.get(studID=search_id)
+            except studentInfo.DoesNotExist:
+                messages.error(request, "Student not found")
+
+    all_equipment = equipment.objects.all()
+
+    context = {
+        'student': student,
+        'all_equipment': all_equipment
+    }
+    return render(request, 'adminUser/equipmentTrackerAdmin.html', context)
+
+
+# Add Equipment
+def addEquipment(request):
+    if request.method == "POST":
+        equipment_name = request.POST.get("equipmentname")
+        serial = request.POST.get("serialnum")
+        
+        if equipment_name:
+            new_equipment = equipment(equipmentName=equipment_name, equipmentSN=serial)
+            new_equipment.save()
+            messages.success(request, "Equipment added successfully")
+            return redirect('addEquipment')
+        else:
+            messages.error(request, "Both fields are required")
+
+    # Fetch all equipment objects from the database
+    all_equipment = equipment.objects.all()
+
+    # Pass the equipment objects to the template context
+    return render(request, 'adminUser/addEquipment.html', {'all_equipment': all_equipment})
+
