@@ -8,7 +8,8 @@ from .models import Alumni,graduateForm,Event,JobFair,Yearbook
 from django.utils import timezone
 from django.db.models import Avg
 import json
-
+from django.core.mail import send_mail,BadHeaderError
+import socket
 # Create your views here.
 
 # Student 
@@ -429,8 +430,6 @@ def alumni_events(request):
     return render(request, 'alumni/users/alumni_events.html', {'events': events})    
 
 
-
-
 def jobfairs(request):
 
     job_fairs = JobFair.objects.all()
@@ -468,13 +467,17 @@ def transaction_alumni(request):
 
 def transac_search(request):
     context = {}
+    
     if request.method == 'POST':
         transac_choice = request.POST.get('transac_choice')
         transac_frequency = request.POST.get('transac_frequency')
 
+        current_month = timezone.now().month
+
+        # Alumni ID Requests
         if transac_choice == 'Alumni ID Requests':
             if transac_frequency == 'Monthly':
-                alumni_requests = Alumni.objects.filter(alumnidate__month=timezone.now().month)
+                alumni_requests = Alumni.objects.filter(alumnidate__month=current_month)
             elif transac_frequency == 'Yearly':
                 alumni_requests = Alumni.objects.filter(alumnidate__year=timezone.now().year)
             else:
@@ -488,17 +491,19 @@ def transac_search(request):
                 'transac_choice': transac_choice
             }
 
+        # Graduate Tracer
         elif transac_choice == 'Graduate Tracer':
             if transac_frequency == 'Monthly':
-                graduate_tracer_data = graduateForm.objects.filter(dategraduated__month=timezone.now().month)
+                graduate_tracer_data = graduateForm.objects.filter(enrollmentdate__month=current_month)
             elif transac_frequency == 'Yearly':
-                graduate_tracer_data = graduateForm.objects.filter(dategraduated__year=timezone.now().year)
+                graduate_tracer_data = graduateForm.objects.filter(enrollmentdate__year=timezone.now().year)
             else:
                 graduate_tracer_data = graduateForm.objects.all()
 
             total_count = graduate_tracer_data.count()
             has_reports = total_count > 0
 
+            # Aggregate weighted means
             weighted_means = {
                 'academicprofession': graduate_tracer_data.aggregate(Avg('academicprofession'))['academicprofession__avg'],
                 'researchcapability': graduate_tracer_data.aggregate(Avg('researchcapability'))['researchcapability__avg'],
@@ -539,3 +544,123 @@ def transac_search(request):
             }
 
     return render(request, 'alumni/users/transaction_alumni.html', context)
+
+
+# admin alumni
+def admin_id_request(request):
+    alumni_requests = Alumni.objects.all()
+    return render(request, 'alumni/users/admin_idRequest.html', {'alumni_requests': alumni_requests})
+
+def approve_alumni_request(request, alumni_id):
+    if request.method == 'POST':
+        alumni = get_object_or_404(Alumni, pk=alumni_id)
+        email_add = alumni.email_add
+
+        try:
+            send_mail(
+                'Alumni ID Request Approved',
+                f'Hello {alumni.firstname} {alumni.lastname},\n\nYour alumni ID request has been approved. Your ID is ready to claim.\n\nThank you!',
+                'alumni_ctuac@ctu.edu.ph',
+                [email_add],
+                fail_silently=False,
+            )
+            alumni.approved = True  # Mark as approved
+            alumni.save()
+
+        except (socket.error, BadHeaderError) as e:
+            messages.error(request, f'Error sending email: {e}')
+        
+        return redirect('admin_idRequest')
+
+    return redirect('admin_idRequest')
+    
+def claim_alumni_id(request, alumni_id):
+    if request.method == 'POST':
+        alumni = get_object_or_404(Alumni, pk=alumni_id)
+        alumni.claimed_date = timezone.now()
+        alumni.save()
+        return redirect('admin_idRequest')
+
+    return redirect('admin_idRequest')
+
+def admin_gradTracer(request):
+    graduate_requests = graduateForm.objects.select_related('alumniID').all()
+    return render(request, 'alumni/users/admin_gradTracer.html', {'graduate_requests': graduate_requests})
+
+def admin_events(request):
+    if request.method == 'POST':
+        
+        eventsName = request.POST.get('eventsName')
+        eventsDate = request.POST.get('eventsDate')
+        eventsLocation = request.POST.get('eventsLocation')
+        eventsDescription = request.POST.get('eventsDescription')
+        eventsImage = request.FILES.get('eventsImage') 
+
+        
+        event = Event.objects.create(
+            eventsName=eventsName,
+            eventsDate=eventsDate,
+            eventsLocation=eventsLocation,
+            eventsDescription=eventsDescription,
+            eventsImage=eventsImage
+        )
+        messages.success(request, 'Successfully Added!')
+        
+        return redirect('admin_events')
+
+    return render(request, 'alumni/users/admin_events.html')
+
+
+
+def admin_jobfairs(request):
+    if request.method == 'POST':
+
+        jobtitle = request.POST.get('jobtitle')
+        companyname = request.POST.get('companyname')
+        joblocation = request.POST.get('joblocation')
+        jobsalary = request.POST.get('jobsalary')
+        employmenttype = request.POST.get('employmenttype')
+        jobdescription = request.POST.get('jobdescription')
+
+
+        
+        jobfair = JobFair.objects.create(
+            jobtitle=jobtitle,
+            companyname=companyname,
+            joblocation=joblocation,
+            jobsalary=jobsalary,
+            employmenttype=employmenttype,
+            jobdescription=jobdescription
+        )
+
+        messages.success(request, 'Successfully Added!')
+        return redirect('admin_jobfairs')
+
+    return render(request, 'alumni/users/admin_jobfairs.html')
+
+
+def admin_yearbook(request):
+    if request.method == 'POST':
+
+        yearbookFirstname = request.POST.get('yearfirstname')
+        yearbookLastname = request.POST.get('yearlastname')
+        yearbookAddress = request.POST.get('yearaddress')
+        yearbookCourse = request.POST.get('yearcourse')
+        yearbookImage = request.FILES.get('yearImage')  
+        yearbookGender = request.POST.get('yeargender')
+        yearbookYearGrad = request.POST.get('yeargraduated')
+
+        yearbook_entry = Yearbook.objects.create(
+            yearbookFirstname=yearbookFirstname,
+            yearbookLastname=yearbookLastname,
+            yearbookAddress=yearbookAddress,
+            yearbookCourse=yearbookCourse,
+            yearbookImage=yearbookImage,
+            yearbookGender = yearbookGender,
+            yearbookYearGrad = yearbookYearGrad
+            
+        )
+        messages.success(request, 'Successfully Added!')
+        return redirect('admin_yearbook')
+
+    return render(request, 'alumni/users/admin_yearbook.html')

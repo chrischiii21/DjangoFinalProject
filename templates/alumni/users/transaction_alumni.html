@@ -2,9 +2,10 @@
 {% load static %}
 {% block content %}
 <section class="h-auto ml-[300px] flex items-center justify-center bg-grayyy">
-  <div class="mx-auto container text-black" style="margin-top: -80%;">
+  <div class="mx-auto container text-black" style="margin-top: -60%;">
     <div class="flex items-center justify-center mt-[200px]">
       <div class="bg-white w-full p-11 h-auto flex flex-col items-center gap-5">
+        <h1 class="text-[36px] font-bold mb-4">Alumni Transactions</h1>
         <form method="post" action="{% url 'transac_search' %}">
           {% csrf_token %}
           <div class="flex gap-5">
@@ -86,7 +87,9 @@
         {% endif %}
         {% endif %}
 
-        <!-- Graduate Tracer -->
+
+
+
         {% if transac_choice == 'Graduate Tracer' %}
         {% if graduate_tracer_data %}
         <div id="printableArea" class="flex flex-col w-full mt-11">
@@ -219,46 +222,46 @@
               <tbody>
                 <tr>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.academicprofession|default:"N/A" }}
+                    {{ weighted_means.academicprofession|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.researchcapability|default:"N/A" }}
+                    {{ weighted_means.researchcapability|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.learningefficiency|default:"N/A" }}
+                    {{ weighted_means.learningefficiency|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.peopleskills|default:"N/A" }}
+                    {{ weighted_means.peopleskills|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.problemsolvingskills|default:"N/A" }}
+                    {{ weighted_means.problemsolvingskills|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.informationtechnologyskills|default:"N/A" }}
+                    {{ weighted_means.informationtechnologyskills|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.meetingprofessionalneeds|default:"N/A" }}
+                    {{ weighted_means.meetingprofessionalneeds|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.communityfield|default:"N/A" }}
+                    {{ weighted_means.communityfield|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.globalfield|default:"N/A" }}
+                    {{ weighted_means.globalfield|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.criticalskills|default:"N/A" }}
+                    {{ weighted_means.criticalskills|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.salaryimprovement|default:"N/A" }}
+                    {{ weighted_means.salaryimprovement|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.opportunitiesabroad|default:"N/A" }}
+                    {{ weighted_means.opportunitiesabroad|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.personalitydevelopment|default:"N/A" }}
+                    {{ weighted_means.personalitydevelopment|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.technologiesvaluesformation|default:"N/A" }}
+                    {{ weighted_means.technologiesvaluesformation|default:"N/A"|floatformat:2 }}
                   </td>
                 </tr>
               </tbody>
@@ -285,43 +288,43 @@
               <tbody>
                 <tr>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.rangeofcourses|default:"N/A" }}
+                    {{ weighted_means.rangeofcourses|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.relevanceprofession|default:"N/A" }}
+                    {{ weighted_means.relevanceprofession|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.extracurricular|default:"N/A" }}
+                    {{ weighted_means.extracurricular|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.premiumresearch|default:"N/A" }}
+                    {{ weighted_means.premiumresearch|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.interlearning|default:"N/A" }}
+                    {{ weighted_means.interlearning|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.teachingenvironment|default:"N/A" }}
+                    {{ weighted_means.teachingenvironment|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.qualityinstruction|default:"N/A" }}
+                    {{ weighted_means.qualityinstruction|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.teachrelationship|default:"N/A" }}
+                    {{ weighted_means.teachrelationship|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.libraryresources|default:"N/A" }}
+                    {{ weighted_means.libraryresources|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.labresources|default:"N/A" }}
+                    {{ weighted_means.labresources|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.classize|default:"N/A" }}
+                    {{ weighted_means.classize|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.profexpertise|default:"N/A" }}
+                    {{ weighted_means.profexpertise|default:"N/A"|floatformat:2 }}
                   </td>
                   <td class="border text-[9px] p-2">
-                    {{ weighted_means.profsubjectmatter|default:"N/A" }}
+                    {{ weighted_means.profsubjectmatter|default:"N/A"|floatformat:2 }}
                   </td>
                 </tr>
               </tbody>
@@ -343,6 +346,11 @@
         </div>
         {% endif %}
         {% endif %}
+
+
+
+
+
       </div>
     </div>
   </div>

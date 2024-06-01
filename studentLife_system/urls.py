@@ -3,6 +3,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import transac_search
+from .views import  approve_alumni_request,claim_alumni_id
 urlpatterns = [
     path('', views.home, name="home"),
     path('requestgmc', views.requestgmc, name="requestgmc"),
@@ -30,4 +31,16 @@ urlpatterns = [
     path('search_yearbook/', views.search_yearbook, name='search_yearbook'),
     path('transaction_alumni.html/',views.transaction_alumni, name="transaction_alumni"),
     path('transac_search', transac_search, name='transac_search'),
+    path('admin_id_request/', views.admin_id_request, name='admin_idRequest'),
+    path('approve_alumni_request/<int:alumni_id>/', approve_alumni_request, name='approve_alumni_request'),
+    path('claim_alumni_id/<int:alumni_id>/', claim_alumni_id, name='claim_alumni_id'),
+    path('admin_grad_tracer/', views.admin_gradTracer, name='admin_gradTracer'),
+    path('admin_events/', views.admin_events, name='admin_events'),    
+    path('admin_jobfairs',views.admin_jobfairs, name="admin_jobfairs"),
+    path('admin_yearbook',views.admin_yearbook, name="admin_yearbook"),
+
+
+
+
+
 ]   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

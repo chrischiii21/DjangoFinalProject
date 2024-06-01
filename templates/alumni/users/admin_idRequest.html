@@ -1,8 +1,8 @@
-{% extends 'users/base.html' %}
+{% extends 'alumni/users/base.html' %}
 
 {% block content %}
 <section class="h-auto ml-[300px] flex items-center justify-center bg-grayyy">
-  <div class="mx-auto container text-black">
+  <div class="mx-auto container text-black" style="margin-top: -60%;">
     <div class="flex items-center justify-center mt-[200px]">
       <div class="bg-white w-full h-screen p-6">
         <h1 class="text-[26px] font-bold mb-4">Alumni ID Requests</h1>
@@ -40,14 +40,14 @@
               {% endif %}
             </p>
 
-         
-              {% if alumni_request.claimed_date %}
-              <p class="w-full font-bold text-center mt-3">
+
+            {% if alumni_request.claimed_date %}
+            <p class="w-full font-bold text-center mt-3">
 
               Claimed
-              </p>
-              {% else %}
-              {% if alumni_request.approved %}
+            </p>
+            {% else %}
+            {% if alumni_request.approved %}
             <form action="{% url 'claim_alumni_id' alumni_request.alumniID %}" method="post" class="w-full text-center">
               {% csrf_token %}
               <button type="submit" class="bg-blue-500 p-2 text-white text-[14px] rounded-full">Claimed</button>
@@ -59,7 +59,7 @@
             </form>
             {% endif %}
             {% endif %}
-            
+
             {% endfor %}
           </div>
         </div>
