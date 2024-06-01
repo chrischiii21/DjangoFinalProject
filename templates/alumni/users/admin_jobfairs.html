@@ -1,0 +1,81 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<section class="h-auto ml-[300px] flex items-center justify-center  bg-grayyy ">
+  <div class="mx-auto container text-black">
+    <div class="flex items-center  justify-center mt-[200px]">
+      <div class="bg-white w-full p-11 h-screen flex flex-col gap-5">
+        <h1 class="text-[26px] font-bold mb-4">Admin Jobfairs</h1>
+
+        <form class=" flex flex-col gap-2" method="post" action="{% url 'admin_jobfairs' %}">
+          {% csrf_token %}
+          <h6 class="text-[19px] ">Search ID</h6>
+
+          <div class="w-full flex gap-5">
+            <div class="w-full">
+              <p>Job Title</p>
+              <input type="text" name="jobtitle" class="bg-grayyy outline-none h-[49px] w-full p-2" required />
+            </div>
+            <div class="w-full">
+              <p>Company Name</p>
+              <input type="text" name="companyname" class="bg-grayyy outline-none h-[49px] w-full  p-2" required />
+            </div>
+
+          </div>
+
+
+          <div class="w-full flex gap-5">
+            <div class="w-full">
+              <p>Location</p>
+              <input type="text" name="joblocation" class="bg-grayyy outline-none h-[49px] w-full p-2" required />
+            </div>
+
+
+
+
+            <div class="w-full">
+              <p class="text-[14px]  mb-2">Employment Type</p>
+              <select name="employmenttype" required class="bg-grayyy outline-none h-[49px] w-full p-2 ">
+                <option value="" disabled selected class="text-gray-400">Select</option>
+                <option value="Full-Time">Full-Time</option>
+                <option value="Contract">Contract</option>
+                <option value="Part-Time">Part-time</option>
+                <option value="Non-Profit">Non-Profit
+                </option>
+
+              </select>
+            </div>
+
+
+
+
+
+          </div>
+
+          <div>
+            <div class="w-full flex gap-5">
+              <div class="w-full">
+                <p>Job Salary</p>
+                <input type="text" name="jobsalary" class="bg-grayyy outline-none h-[49px] w-[540px] p-2" required />
+              </div>
+            </div>
+            <div class=" flex gap-5">
+              <div>
+                <p>Job Description</p>
+                <textarea name="jobdescription" required class="bg-grayyy w-[540px] h-[150px] outline-none p-5"></textarea>
+              </div>
+            </div>
+
+
+            <div class="flex items-center justify-center mt-5">
+              <button class="bg-blo p-3 text-white w-[150px]">Submit</button>
+            </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

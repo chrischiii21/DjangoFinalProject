@@ -1,20 +1,77 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 
 <head>
-  <link rel="shortcut icon" type="x-icon" href="{% static 'images/CTU_logo.png' %}">
   <title>STUDENT LIFE INFORMATION SYSTEM</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="{% static 'main.css'%}">
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://kit.fontawesome.com/c384d92761.js" crossorigin="anonymous"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        container: {
+          padding: {
+            DEFAULT: "15px",
+          },
+        },
+
+        extend: {
+          colors: {
+            grayyy: "#f1f1f1",
+            gray2: "#F2F2F2",
+            orng: "#FF8000",
+            blo: "#4682B4",
+            tgray: "#5A5A5A",
+
+          },
+
+          fontWeight: {
+            medium: 500,
+            semibold: 600,
+            bold: 700,
+          },
+          fontStyle: {
+            sfLight: [
+              "SF Pro Text",
+              "Arial",
+              "sans-serif",
+              {
+                "font-weight": 600,
+                "font-style": "normal"
+              },
+            ],
+            sfRegular: [
+              "SF Pro Text",
+              "Arial",
+              "sans-serif",
+              {
+                "font-weight": 400,
+                "font-style": "normal"
+              },
+            ],
+          },
+
+        },
+      },
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="/static/alumni/users/styles.css">
+
 </head>
 
 <body>
   <div class="orange-bar">
-    <img src="{% static 'images/CTU_logo.png' %}" class="logo">
-
+    <img src="{% static 'alumni/users/images/CTU_logo.png' %}" class="logo">
   </div>
+
+
+
   <div class="left-side">
     <nav class="side-nav">
       <ul>
@@ -23,7 +80,7 @@
             <span class="fas fa-caret-down first"></span>
           </a>
           <ul class="studentlife">
-            <li><a href="/equipmenttracker">Equipment Tracker</a></li>
+            <li><a href="/equipmenttracker">Tracker</a></li>
             <li><a href="/requestgmc">Good Moral Certificate Issuance</a></li>
             <li><a href="#">PPMP Tracker</a></li>
             <li><a href="/monthlyCalendar">Monthly Calendar of Activites</a></li>
@@ -92,10 +149,7 @@
             <span class="fas fa-caret-down seventh"></span>
           </a>
           <ul class="community-show">
-            <li><a href="#">Events</a></li>
-            <li><a href="#">CrowdFunding Projects</a></li>
-            <li><a href="#">Donatio App</a></li>
-            <li><a href="#">Transaction Reports</a></li>
+
 
           </ul>
         </li>
@@ -127,18 +181,68 @@
       </ul>
   </div>
   </div>
+
+
+
   <div class="search-container">
     <div class="search-icon">
       <i class="fa-solid fa-magnifying-glass"></i>
     </div>
     <input type="text" placeholder="Search...">
   </div>
+
   </nav>
-  {% block bodycontent %}
 
-  {% endblock bodycontent %}
+  {% block content %}
 
-  <script src="{% static 'newmain.js' %}"></script>
+  {% endblock %}
+
+  <script>
+    $('.studentlife-btn').click(function() {
+      $('.side-nav ul .studentlife').toggleClass("show");
+      $('.side-nav ul .first').toggleClass("rotate");
+    });
+    $('.scholar-btn').click(function() {
+      $('.side-nav ul .scholar-show').toggleClass("show2");
+      $('.side-nav ul .second').toggleClass("rotate");
+    });
+    $('.jobplace-btn').click(function() {
+      $('.side-nav ul .jobplace-show').toggleClass("show3");
+      $('.side-nav ul .third').toggleClass("rotate");
+    });
+    $('.student_disc-btn').click(function() {
+      $('.side-nav ul .student_disc-show').toggleClass("show4");
+      $('.side-nav ul .fourth').toggleClass("rotate");
+    });
+    $('.guide-btn').click(function() {
+      $('.side-nav ul .guide-show').toggleClass("show5");
+      $('.side-nav ul .fifth').toggleClass("rotate");
+    });
+    $('.alumni-btn').click(function() {
+      $('.side-nav ul .alumni-show').toggleClass("show6");
+      $('.side-nav ul .sixth').toggleClass("rotate");
+    });
+    $('.community-btn').click(function() {
+      $('.side-nav ul .community-show').toggleClass("show7");
+      $('.side-nav ul .seventh').toggleClass("rotate");
+    });
+    $('.student_org-btn').click(function() {
+      $('.side-nav ul .student_org-show').toggleClass("show8");
+      $('.side-nav ul .eight').toggleClass("rotate");
+    });
+    $('.medical-btn').click(function() {
+      $('.side-nav ul .medical-show').toggleClass("show9");
+      $('.side-nav ul .ninth').toggleClass("rotate");
+    });
+
+    var descriptionElement = document.getElementById("description");
+    var maxWords = 10; // Change this to the desired word limit
+
+    var words = descriptionElement.innerText.split(" ");
+    if (words.length > maxWords) {
+      descriptionElement.innerText = words.slice(0, maxWords).join(" ") + "...";
+    }
+  </script>
 </body>
 
 </html>
