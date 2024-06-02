@@ -641,7 +641,6 @@ def admin_jobfairs(request):
 
 def admin_yearbook(request):
     if request.method == 'POST':
-
         yearbookFirstname = request.POST.get('yearfirstname')
         yearbookLastname = request.POST.get('yearlastname')
         yearbookAddress = request.POST.get('yearaddress')
@@ -650,17 +649,21 @@ def admin_yearbook(request):
         yearbookGender = request.POST.get('yeargender')
         yearbookYearGrad = request.POST.get('yeargraduated')
 
-        yearbook_entry = Yearbook.objects.create(
-            yearbookFirstname=yearbookFirstname,
-            yearbookLastname=yearbookLastname,
-            yearbookAddress=yearbookAddress,
-            yearbookCourse=yearbookCourse,
-            yearbookImage=yearbookImage,
-            yearbookGender = yearbookGender,
-            yearbookYearGrad = yearbookYearGrad
-            
-        )
-        messages.success(request, 'Successfully Added!')
+        # Check if an entry with the same first name and last name already exists
+        if Yearbook.objects.filter(yearbookFirstname=yearbookFirstname, yearbookLastname=yearbookLastname).exists():
+            messages.error(request, 'An entry with this name already exists.')
+        else:
+            yearbook_entry = Yearbook.objects.create(
+                yearbookFirstname=yearbookFirstname,
+                yearbookLastname=yearbookLastname,
+                yearbookAddress=yearbookAddress,
+                yearbookCourse=yearbookCourse,
+                yearbookImage=yearbookImage,
+                yearbookGender=yearbookGender,
+                yearbookYearGrad=yearbookYearGrad
+            )
+            messages.success(request, 'Successfully Added!')
+        
         return redirect('admin_yearbook')
 
     return render(request, 'alumni/users/admin_yearbook.html')
